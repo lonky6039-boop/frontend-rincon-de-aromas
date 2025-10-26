@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rincón de Aromas</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body { background: #FFF9F5; color: #1A1A1A; font-family: Arial, sans-serif; margin:0; }
+header { background: #FADADD; padding: 10px; text-align: center; font-weight: bold; }
+nav { background: #FADADD; display: flex; justify-content: space-around; padding: 10px; }
+button { background: #FADADD; border: none; padding: 10px; margin:5px; cursor: pointer; font-weight: bold; }
+section { padding: 10px; }
+.chat-box { border: 1px solid #ccc; height: 200px; overflow-y: auto; background: white; margin-bottom: 10px; padding: 5px; }
+.message-input { width: 80%; padding: 5px; }
+.send-btn { background: #FADADD; border: 1px solid #ccc; padding: 5px; }
+</style>
+</head>
+<body>
+<header><h1>🌸 Rincón de Aromas 🌸</h1></header>
+<nav>
+<button onclick="showSection('productos')">🛍️ Productos</button>
+<button onclick="showSection('carrito')">🛒 Carrito</button>
+<button onclick="showSection('chat')">💬 Chat</button>
+<button onclick="showSection('perfil')">👤 Perfil</button>
+</nav>
+<section id="contenido">
+<h2>Bienvenida</h2>
+<p>Descubrí productos de belleza y cosmética natural. 💐</p>
+</section>
+
+<script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+<script>
+const socket = io('https://tu-backend-url.onrender.com'); // reemplazá con tu backend
+function showSection(seccion){
+  const contenido = document.getElementById('contenido');
+  if(seccion==='productos'){
+    contenido.innerHTML='<h2>Productos disponibles</h2><ul><li>Perfume Floral - $1500 <button>Agregar</button></li><li>Crema Hidratante - $800 <button>Agregar</button></li><li>Jabón Natural - $500 <button>Agregar</button></li></ul>';
+  } else if(seccion==='carrito'){
+    contenido.innerHTML='<h2>Tu carrito está vacío 🛒</h2>';
+  } else if(seccion==='chat'){
+    contenido.innerHTML='<h2>Chat con vendedor</h2><div class="chat-box" id="chat"></div><input id="mensaje" class="message-input" placeholder="Escribí un mensaje..."><button class="send-btn" onclick="enviar()">Enviar</button>';
+  } else if(seccion==='perfil'){
+    contenido.innerHTML='<h2>Mi perfil</h2><p>Nombre: Usuario de ejemplo</p><p>Email: ejemplo@correo.com</p>';
+  }
+}
+function enviar(){
+  const msg = document.getElementById('mensaje').value;
+  socket.emit('mensaje', msg);
+  document.getElementById('mensaje').value='';
+}
+socket.on('mensaje', msg=>{
+  const chat = document.getElementById('chat');
+  if(chat){ chat.innerHTML += `<p>${msg}</p>`; chat.scrollTop = chat.scrollHeight; }
+{
+}
+});
+</script>
+</body>
+</html>
+{
+  "name": "Rincón de Aromas",
+  "short_name": "RA",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#FFF9F5",
+  "theme_color": "#FADADD",
+  "icons": [
+    { "src": "logo-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "logo-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
+# 🌸 Rincón de Aromas — Frontend
+
+Tienda de cosmética natural PWA (instalable en Android/iOS/PC).
+
+## Características
+- Menú dinámico (Productos, Carrito, Chat, Perfil)
+- Chat en tiempo real (Socket.io)
+- Diseño PWA: instalable como app
+- Colores: Rosado crema, blanco crema, negro para letras
+
+## Cómo usar
+1. Subí este repositorio a **Vercel** (gratis).
+2. Asegurate de que el backend esté activo (Render).
+3. La app se podrá abrir y “Agregar a pantalla de inicio”.
